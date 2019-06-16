@@ -2,6 +2,7 @@ import numpy as np
 import cv2 as cv
 from skimage.morphology import label
 from skimage.morphology import skeletonize_3d
+from matplotlib import pyplot as plt
 from math import sqrt
 from math import pi
 import xlsxwriter
@@ -18,7 +19,7 @@ epList = []
 
 # Read in images from stack:
 # CHANGE PATH ACCORDINGLY
-for number in range(403, 435):
+for number in range(401, 425):
     strr = "/Users/markolchanyi/Desktop/Imperial_Year_3/NeuroProject/Ch2_Stitched_401_600_TIFF_50/Stitched_Z" + str(number) + ".tif"
     a = cv.imread(strr, cv.IMREAD_GRAYSCALE)
     arrays.append(a)
@@ -57,6 +58,13 @@ for num in range(0, data.__len__()-1):
 
     # Detect blobs.
     keypoints = detector.detect(img)
+    im_with_keypoints = cv.drawKeypoints(img, keypoints, np.array([]), (0, 0, 255),
+                                         cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+
+    # Show blobs:
+    # Draws red flags with size corresponding to soma size
+    cv.imwrite('/Users/markolchanyi/Desktop/blobImages/img' + str(num) + '.jpg', im_with_keypoints)
+
     # 'x' represents x coordinate of soma
     # 'y' represents y coordinate of soma
     for keyPoint in keypoints:
